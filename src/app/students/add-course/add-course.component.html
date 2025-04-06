@@ -1,13 +1,13 @@
 <div class="container">
+  <a href="#" routerLink="/student/index" class="btn btn-primary">Volver</a>
   <div>
     <h1>Añadir cursos a estudiante</h1>
-
   </div>
   <div>
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Nombre  curso</th>
+          <th>Nombre curso</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -15,8 +15,22 @@
         <tr *ngFor="let course of courseList">
           <td>{{ course.courseName }}</td>
           <td>
-            <button [disabled]="course.isAssigned"  type="button" (click)="addCourseToStudent(student.id,course.id)" class="btn btn-success">Añadir curso</button>
-            <button [disabled]="!course.isAssigned"  type="button" (click)="removeCourseFromStudent(student.id,course.id)" class="btn btn-danger">Remover curso</button>
+            <button
+              [disabled]="course.isAssigned"
+              type="button"
+              (click)="addCourseToStudent(student.id, course.id)"
+              class="btn btn-success"
+            >
+              Añadir curso
+            </button>
+            <button
+              [disabled]="!course.isAssigned"
+              type="button"
+              (click)="removeCourseFromStudent(student.id, course.id)"
+              class="btn btn-danger"
+            >
+              Remover curso
+            </button>
           </td>
         </tr>
       </tbody>

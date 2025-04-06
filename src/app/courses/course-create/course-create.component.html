@@ -1,6 +1,6 @@
 <div class="container">
-    <a href="#" [routerLink]="['/course/index']" class="btn btn-primary">Back</a>
-    <h1>Editar Curso</h1>
+    <a href="#" [routerLink]="['/course/index']" class="btn btn-primary">Volver</a>
+    <h1>Crear Curso</h1>
     <form [formGroup]="form" (ngSubmit)="submit()">
         <div class="form-group">
             <label for="courseName">Nombre del curso:</label>
@@ -15,6 +15,6 @@
                 </div>
             </div> -->
         </div>
-        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Submit</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!form.valid || disable">Crear</button>
     </form>
 </div>

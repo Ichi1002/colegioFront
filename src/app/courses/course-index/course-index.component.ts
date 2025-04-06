@@ -9,11 +9,12 @@ import { NgToastService } from 'ng-angular-popup';
   selector: 'app-course-index',
   imports: [CommonModule, RouterModule],
   templateUrl: './course-index.component.html',
-  styleUrl: './course-index.component.css'
+  styleUrl: './course-index.component.css',
 })
 export class CourseIndexComponent {
   courseList!: Course[];
   error!: string;
+  idDeshabilitado!: number;
 
   constructor(
     private readonly courseService: CoursesService,
@@ -22,31 +23,27 @@ export class CourseIndexComponent {
   ) {}
   ngOnInit(): void {
     this.courseService.getAllCourses().subscribe({
-      next: (data: any) => {    
+      next: (data: any) => {
         this.courseList = data;
       },
       error: (error: any) => {
-        console.log(error);
         this.error = 'Error';
       },
     });
   }
 
-  deleteCourse(id: string) {    
+  deleteCourse(id: number) {
     this.courseService.deleteCourse(id).subscribe({
       next: (data: any) => {
-        console.log(data);
-        if(data)
+        if (data)
           this.toast.danger(data[0].errorMessage, data[0].courseName, 3000);
-        else{
-          this.toast.info("Curso borrado exitosamente","", 3000);
-          setTimeout(()=>window.location.reload(),3000)
-          
+        else {
+          this.toast.info('Curso borrado exitosamente', '', 3000);
+          setTimeout(() => window.location.reload(), 3000);
+          this.idDeshabilitado = id;
         }
-       
       },
-      error: (error: any) => {
-      },
-    })
+      error: (error: any) => {},
+    });
   }
 }

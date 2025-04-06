@@ -1,5 +1,5 @@
 export interface Student{
-    id: string,
+    id: number,
     firstName: string,
     lastName: string,
     country: string,
@@ -8,7 +8,7 @@ export interface Student{
 }
 
 export interface Course{
-    id:string,
+    id:number,
     courseName:string,
     students ?: Student[]
     isAssigned ?: boolean;

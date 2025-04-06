@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { xml2js } from 'xml-js';
 import { Country, Course, Student } from '../interface/student.interface';
 import { map, Observable } from 'rxjs';
+import { json } from 'stream/consumers';
 
 @Injectable({
   providedIn: 'root',
@@ -18,20 +19,22 @@ export class StudentsService {
     const headers = {
       'Content-Type': 'text/xml',
     };
-  
+
     const options: any = {
       observe: 'body',
       headers,
       responseType: 'text',
     };
-  
+
     this.soapRequestPayload = this.getStudentSoap(studentId);
-  
+
     return this.http.post(this.url, this.soapRequestPayload, options).pipe(
       map((response: any) => {
         const jsonData: any = this.xmlToJson(response);
         const studentData =
-          jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body']['ns2:getStudentResponse'];
+          jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body'][
+            'ns2:getStudentResponse'
+          ];
 
         return {
           id: studentData['ns2:id']['_text'],
@@ -40,23 +43,23 @@ export class StudentsService {
           country: studentData['ns2:country']['_text'],
           email: studentData['ns2:email']['_text'],
           courses: studentData['ns2:course']
-          ? Array.isArray(studentData['ns2:course'])
-          ? studentData['ns2:course'].map((course: any) => ({
-              id: course['ns2:id']?.['_text'] || null,
-              courseName: course['ns2:name']?.['_text'] || null,
-            }))
-          : [
-              {
-                id: studentData['ns2:course']['ns2:id']?.['_text'] || null,
-                courseName: studentData['ns2:course']['ns2:name']?.['_text'] || null,
-              },
-            ]
-        : [],
+            ? Array.isArray(studentData['ns2:course'])
+              ? studentData['ns2:course'].map((course: any) => ({
+                  id: course['ns2:id']?.['_text'] || null,
+                  courseName: course['ns2:name']?.['_text'] || null,
+                }))
+              : [
+                  {
+                    id: studentData['ns2:course']['ns2:id']?.['_text'] || null,
+                    courseName:
+                      studentData['ns2:course']['ns2:name']?.['_text'] || null,
+                  },
+                ]
+            : [],
         };
       })
     );
   }
-  
 
   getAllStudents(): Observable<Student[]> {
     return this.http
@@ -65,15 +68,18 @@ export class StudentsService {
         responseType: 'text',
       })
       .pipe(
-        map((response: any) => {          
+        map((response: any) => {
           const jsonData: any = this.xmlToJson(response);
-          let students = jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body'][
-            'ns2:getAllStudentsResponse'
-          ]['ns2:student']
-          if(!jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body'][
-            'ns2:getAllStudentsResponse'
-          ]['ns2:student'])
-          return  
+          let students =
+            jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body'][
+              'ns2:getAllStudentsResponse'
+            ]['ns2:student'];
+          if (
+            !jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body'][
+              'ns2:getAllStudentsResponse'
+            ]['ns2:student']
+          )
+            return;
           students = Array.isArray(students) ? students : [students];
 
           return students.map((student: any) => ({
@@ -91,35 +97,105 @@ export class StudentsService {
     return this.http.post(this.url, this.addStudentSoap(form), {
       headers: { 'Content-Type': 'text/xml' },
       responseType: 'text',
-    });
+    })      .pipe(
+      map((response: any) => {
+        const jsonData: any = this.xmlToJson(response);
+        if (
+          !jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body'][
+            'ns2:addStudentResponse'
+          ]['ns2:fault']
+        )
+          return;
+        let fault =
+          jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body'][
+            'ns2:addStudentResponse'
+          ]['ns2:fault'];
+        fault = Array.isArray(fault) ? fault : [fault];
+        return fault.map((course: any) => ({
+          errorMessage: course['ns2:detail']['ns2:errorMessage']['_text'],
+          courseName: course['ns2:faultcode']['_text'],
+        }));
+      })
+    );
+    ;
   }
 
   updateStudent(form: any) {
-    return this.http.post(this.url, this.updateStudentSoap(form), {
-      headers: { 'Content-Type': 'text/xml' },
-      responseType: 'text',
-    });
+    return this.http
+      .post(this.url, this.updateStudentSoap(form), {
+        headers: { 'Content-Type': 'text/xml' },
+        responseType: 'text',
+      })
+      .pipe(
+        map((response: any) => {
+          const jsonData: any = this.xmlToJson(response);
+          if (
+            !jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body'][
+              'ns2:updateStudentResponse'
+            ]['ns2:fault']
+          )
+            return;
+          let fault =
+            jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body'][
+              'ns2:updateStudentResponse'
+            ]['ns2:fault'];
+          fault = Array.isArray(fault) ? fault : [fault];
+          return fault.map((course: any) => ({
+            errorMessage: course['ns2:detail']['ns2:errorMessage']['_text'],
+            courseName: course['ns2:faultcode']['_text'],
+          }));
+        })
+      );
   }
 
-  addCourseToStudent(idStudent:string,idCourse:string) {
-    return this.http.post(this.url, this.addCourseToStudentSoap(idStudent,idCourse), {
-      headers: { 'Content-Type': 'text/xml' },
-      responseType: 'text',
-    });
+  addCourseToStudent(idStudent: string, idCourse: string) {
+    return this.http.post(
+      this.url,
+      this.addCourseToStudentSoap(idStudent, idCourse),
+      {
+        headers: { 'Content-Type': 'text/xml' },
+        responseType: 'text',
+      }
+    );
   }
 
-  removeCourseToStudent(idStudent:string,idCourse:string) {
-    return this.http.post(this.url, this.removeCourseToStudentSoap(idStudent,idCourse), {
-      headers: { 'Content-Type': 'text/xml' },
-      responseType: 'text',
-    });
+  removeCourseToStudent(idStudent: string, idCourse: string) {
+    return this.http.post(
+      this.url,
+      this.removeCourseToStudentSoap(idStudent, idCourse),
+      {
+        headers: { 'Content-Type': 'text/xml' },
+        responseType: 'text',
+      }
+    );
   }
 
-  deleteStudent(studentId: string) {
-    return this.http.post(this.url, this.deleteStudentSoap(studentId), {
-      headers: { 'Content-Type': 'text/xml' },
-      responseType: 'text',
-    });
+  deleteStudent(studentId: number) {
+    return this.http
+      .post(this.url, this.deleteStudentSoap(studentId), {
+        headers: { 'Content-Type': 'text/xml' },
+        responseType: 'text',
+      })
+      .pipe(
+        map((response: any) => {
+          const jsonData: any = this.xmlToJson(response);
+          if (
+            !jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body'][
+              'ns2:deleteStudentResponse'
+            ]['ns2:fault']
+          )
+            return;
+          let fault =
+            jsonData['SOAP-ENV:Envelope']['SOAP-ENV:Body'][
+              'ns2:deleteStudentResponse'
+            ]['ns2:fault'];
+          fault = Array.isArray(fault) ? fault : [fault];
+          return fault.map((course: any) => ({
+            errorMessage: course['ns2:detail']['ns2:errorMessage']['_text'],
+            courseName: course['ns2:faultcode']['_text'],
+          }));
+        })
+      );
   }
 
   getAllCountry(): Observable<Country[]> {
@@ -193,7 +269,7 @@ export class StudentsService {
       </soapenv:Envelope>
     `;
   }
-  private deleteStudentSoap(studentId:string) {
+  private deleteStudentSoap(studentId: number) {
     return `
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:stud="http://www.example.com/student">
            <soapenv:Header/>
@@ -215,7 +291,7 @@ export class StudentsService {
       </soapenv:Envelope>
     `;
   }
-  private addCourseToStudentSoap(idStudent:string,idCourse:string) {
+  private addCourseToStudentSoap(idStudent: string, idCourse: string) {
     return `
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:stud="http://www.example.com/student">
    <soapenv:Header/>
@@ -228,7 +304,7 @@ export class StudentsService {
 </soapenv:Envelope>
     `;
   }
-  private removeCourseToStudentSoap(idStudent:string,idCourse:string) {
+  private removeCourseToStudentSoap(idStudent: string, idCourse: string) {
     return `
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:stud="http://www.example.com/student">
    <soapenv:Header/>

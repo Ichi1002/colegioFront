@@ -160,7 +160,7 @@ export class CoursesService {
     `;
   }
 
-  deleteCourse(CourseId: string) {
+  deleteCourse(CourseId: number) {
     return this.http.post(this.url, this.deleteCourseSoap(CourseId), {
       headers: { 'Content-Type': 'text/xml' },
       responseType: 'text',
@@ -185,7 +185,7 @@ export class CoursesService {
     ;
   }
 
-  private deleteCourseSoap(CourseId:string) {
+  private deleteCourseSoap(CourseId:number) {
     return `
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:stud="http://www.example.com/student">
            <soapenv:Header/>

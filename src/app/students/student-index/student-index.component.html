@@ -20,10 +20,10 @@
                 <td>{{ student.email }}</td>
                 <td>{{ student.country }}</td>
                 <td>
-                  <a href="#" [routerLink]="['/student/', student.id, 'view']" class="btn btn-info">View</a>
-                  <a href="#" [routerLink]="['/student/', student.id, 'edit']" class="btn btn-primary">Edit</a>
+                  <a href="#" [routerLink]="['/student/', student.id, 'view']" class="btn btn-info">Ver</a>
+                  <a href="#" [routerLink]="['/student/', student.id, 'edit']" class="btn btn-primary">Editar</a>
                   <a href="#" [routerLink]="['/student/', student.id, 'addCourse']" class="btn btn-success">Gestionar Cursos</a>
-                  <button type="button" (click)="deleteStudent(student.id)" class="btn btn-danger">Delete</button>
+                  <button type="button" (click)="deleteStudent(student.id)" [disabled]="student.id === idDeshabilitado" class="btn btn-danger">Borrar</button>
                 </td>
               </tr>
         </tbody>

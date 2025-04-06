@@ -1,52 +1,58 @@
 <div class="container">
-    <h1>Create New Post</h1>
-  
-    <a href="#" routerLink="/post/index" class="btn btn-primary">Back</a>
-        
-    <form [formGroup]="form" (ngSubmit)="submit()">
-  
-        <div class="form-group">
-            <label for="firstName">Nombre:</label>
-            <input 
-                formControlName="firstName"
-                id="firstName" 
-                type="text" 
-                class="form-control">
-            <!-- <div *ngIf="f['firstName'].touched & f['firstName'].invalid" class="alert alert-danger">
+  <a href="#" routerLink="/student/index" class="btn btn-primary">Volver</a>
+  <h1>Crear nuevo estudiante</h1>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-group">
+      <label for="firstName">Nombre:</label>
+      <input
+        formControlName="firstName"
+        id="firstName"
+        type="text"
+        class="form-control"
+      />
+      <!-- <div *ngIf="f['firstName'].touched & f['firstName'].invalid" class="alert alert-danger">
                 <div *ngIf="f['firstName'].errors & f['firstName'].errors['required']">
                 Nombre es requerido.
                 </div>
             </div> -->
-        </div>
-  
-        <div class="form-group">
-            <label for="lastName">Apellido:</label>
-            <input 
-                formControlName="lastName"
-                id="lastName" 
-                type="text" 
-                class="form-control">
-            <!-- <div *ngIf="f['firstName'].touched & f['firstName'].invalid" class="alert alert-danger">
-                <div *ngIf="f['firstName'].errors & f['firstName'].errors['required']">
-                Nombre es requerido.
-                </div>
-            </div> -->
-        </div>
+    </div>
 
-        <div class="form-group">
-            <label for="country">Pais:</label>
-            <select 
-              class="form-select" 
-              aria-label="Default select example" 
-              formControlName="country"
-              id="country">
-              <option value="" disabled selected>Selecciona un pais</option>
-              <option *ngFor="let country of countryList" [value]="country.code">
-                {{ country.countryName }}
-              </option>
-            </select>
-          </div>
-  
-        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Submit</button>
-    </form>
+    <div class="form-group">
+      <label for="lastName">Apellido:</label>
+      <input
+        formControlName="lastName"
+        id="lastName"
+        type="text"
+        class="form-control"
+      />
+      <!-- <div *ngIf="f['firstName'].touched & f['firstName'].invalid" class="alert alert-danger">
+                <div *ngIf="f['firstName'].errors & f['firstName'].errors['required']">
+                Nombre es requerido.
+                </div>
+            </div> -->
+    </div>
+
+    <div class="form-group">
+      <label for="country">Pais:</label>
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        formControlName="country"
+        id="country"
+      >
+        <option value="" disabled selected>Selecciona un pais</option>
+        <option *ngFor="let country of countryList" [value]="country.code">
+          {{ country.countryName }}
+        </option>
+      </select>
+    </div>
+
+    <button
+      class="btn btn-primary"
+      type="submit"
+      [disabled]="!form.valid || disable"
+    >
+      Crear
+    </button>
+  </form>
 </div>

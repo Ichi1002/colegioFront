@@ -5,6 +5,7 @@ import { StudentsService } from '../students.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Country, Student } from '../../interface/student.interface';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-student-edit',
@@ -22,6 +23,7 @@ export class StudentEditComponent {
     private studentsService: StudentsService,
     private router: Router,
     private route: ActivatedRoute,
+    private toast: NgToastService
   ) { }
       
 
@@ -58,8 +60,14 @@ export class StudentEditComponent {
   }
       
   submit(){
-    this.studentsService.updateStudent(this.form.value).subscribe((res:any) => {
-         this.router.navigateByUrl('student/index');
+    this.studentsService.updateStudent(this.form.value).subscribe((data:any) => {
+      if(data)
+        this.toast.danger(data[0].errorMessage, data[0].courseName, 3000);
+      else{
+        this.toast.info("Estudiante actualizado exitosamente","", 3000);
+        setTimeout(()=>this.router.navigateByUrl('student/index'),3000)
+        
+      }
     })
   }
 }

@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Course } from '../../interface/student.interface';
 import { CoursesService } from '../courses.service';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-course-create',
@@ -15,11 +16,13 @@ export class CourseCreateComponent {
   form!: FormGroup;
   id!: any;
   course !: Course;
+  disable : boolean = false;
 
   constructor(
     private courseService: CoursesService,
     private router: Router,
     private route: ActivatedRoute,
+    private toast: NgToastService
   ) { }
       
   ngOnInit(): void {
@@ -34,7 +37,10 @@ export class CourseCreateComponent {
       
   submit(){
     this.courseService.createCourse(this.form.value).subscribe((res:any) => {
-         this.router.navigateByUrl('course/index');
+      this.toast.info("Curso creado exitosamente","", 3000);
+      this.disable = true;
+      setTimeout(()=>this.router.navigateByUrl('course/index'),3000)
+         
     })
   }
 }

@@ -3,6 +3,7 @@ import { StudentsService } from '../students.service';
 import { Student } from '../../interface/student.interface';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-student-index',
@@ -14,10 +15,13 @@ import { Router, RouterModule } from '@angular/router';
 export class StudentIndexComponent implements OnInit {
   studentList!: Student[];
   error!: string;
+  disable : boolean = false;
+  idDeshabilitado!: number;
 
   constructor(
     private readonly studentService: StudentsService,
-    private router: Router
+    private router: Router,
+    private toast: NgToastService
   ) {}
   ngOnInit(): void {
     this.studentService.getAllStudents().subscribe({
@@ -31,10 +35,20 @@ export class StudentIndexComponent implements OnInit {
     });
   }
 
-  deleteStudent(id: string) {
+  deleteStudent(id: number) {
     this.studentService.deleteStudent(id).subscribe({
       next: (data: any) => {
-        window.location.reload();
+        console.log(data);
+        
+        if(data){
+          this.toast.danger(data[0].errorMessage, data[0].courseName, 3000);
+          this.disable = true;
+        }
+        else{
+          this.toast.info("Estudiante borrado exitosamente","", 3000);
+          setTimeout(()=>window.location.reload(),3000)
+          this.idDeshabilitado = id;
+        }
       },
       error: (error: any) => {
         this.error = 'Error';
