@@ -1,0 +1,20 @@
+<div class="container">
+    <a href="#" [routerLink]="['/course/index']" class="btn btn-primary">Back</a>
+    <h1>Editar Curso</h1>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-group">
+            <label for="courseName">Nombre del curso:</label>
+            <input 
+                formControlName="courseName"
+                id="courseName" 
+                type="text" 
+                class="form-control">
+            <!-- <div *ngIf="f['firstName'].touched & f['firstName'].invalid" class="alert alert-danger">
+                <div *ngIf="f['firstName'].errors & f['firstName'].errors['required']">
+                Nombre es requerido.
+                </div>
+            </div> -->
+        </div>
+        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Submit</button>
+    </form>
+</div>

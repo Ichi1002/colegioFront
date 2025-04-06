@@ -1,0 +1,43 @@
+<div class="container">
+    <h1>View Post</h1>
+  
+    <a href="#" routerLink="/student/index" class="btn btn-primary">Back</a>
+   
+    <div>
+        <strong>Id:</strong>
+        <p>{{ student?.id }}</p>
+    </div>
+   
+    <div>
+        <strong>Nombre:</strong>
+        <p>{{ student?.firstName }}</p>
+    </div>
+   
+    <div>
+        <strong>Apellido:</strong>
+        <p>{{ student?.lastName }}</p>
+    </div>
+    <div>
+        <strong>Pais:</strong>
+        <p>{{ student?.country }}</p>
+    </div>
+    <div>
+        <strong>Cursos:</strong>
+        <table class="table table-striped">
+            <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                  </tr>
+            </thead>
+            <tbody>
+                  <tr *ngFor="let courses of student?.courses">
+                    <td>{{ courses?.id }}</td>
+                    <td>{{ courses?.courseName }}</td>
+                  </tr>
+            </tbody>
+        </table>
+    </div> 
+    <div>
+   
+</div>

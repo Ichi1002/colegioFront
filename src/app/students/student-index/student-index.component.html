@@ -1,0 +1,31 @@
+<div class="container">
+  <h1>CRUD para estudiante</h1>    
+    <a href="#" [routerLink]="['/student/create']" class="btn btn-success">Crear nuevo estudiante</a>
+    <table class="table table-striped">
+        <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Ciudad</th>
+                <th>Acciones</th>
+              </tr>
+        </thead>
+        <tbody>
+              <tr *ngFor="let student of studentList">
+                <td>{{ student.id }}</td>
+                <td>{{ student.firstName }}</td>
+                <td>{{ student.lastName }}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.country }}</td>
+                <td>
+                  <a href="#" [routerLink]="['/student/', student.id, 'view']" class="btn btn-info">View</a>
+                  <a href="#" [routerLink]="['/student/', student.id, 'edit']" class="btn btn-primary">Edit</a>
+                  <a href="#" [routerLink]="['/student/', student.id, 'addCourse']" class="btn btn-success">Gestionar Cursos</a>
+                  <button type="button" (click)="deleteStudent(student.id)" class="btn btn-danger">Delete</button>
+                </td>
+              </tr>
+        </tbody>
+    </table>
+ </div>
