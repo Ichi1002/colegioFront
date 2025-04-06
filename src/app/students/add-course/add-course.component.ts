@@ -43,7 +43,7 @@ export class AddCourseComponent implements OnInit {
     });
   }
 
-  addCourseToStudent(idStudent: string, idCourse: string) {
+  addCourseToStudent(idStudent: number, idCourse: number) {
     this.studentService
       .addCourseToStudent(idStudent, idCourse)
       .subscribe((data) => {
@@ -51,7 +51,7 @@ export class AddCourseComponent implements OnInit {
       });
   }
 
-  removeCourseFromStudent(idStudent: string, idCourse: string) {
+  removeCourseFromStudent(idStudent: number, idCourse: number) {
     this.studentService.removeCourseToStudent(idStudent, idCourse).subscribe(
       (data) => {
         window.location.reload();

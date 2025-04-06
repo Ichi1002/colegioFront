@@ -148,7 +148,7 @@ export class StudentsService {
       );
   }
 
-  addCourseToStudent(idStudent: string, idCourse: string) {
+  addCourseToStudent(idStudent: number, idCourse: number) {
     return this.http.post(
       this.url,
       this.addCourseToStudentSoap(idStudent, idCourse),
@@ -159,7 +159,7 @@ export class StudentsService {
     );
   }
 
-  removeCourseToStudent(idStudent: string, idCourse: string) {
+  removeCourseToStudent(idStudent: number, idCourse: number) {
     return this.http.post(
       this.url,
       this.removeCourseToStudentSoap(idStudent, idCourse),
@@ -291,7 +291,7 @@ export class StudentsService {
       </soapenv:Envelope>
     `;
   }
-  private addCourseToStudentSoap(idStudent: string, idCourse: string) {
+  private addCourseToStudentSoap(idStudent: number, idCourse: number) {
     return `
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:stud="http://www.example.com/student">
    <soapenv:Header/>
@@ -304,7 +304,7 @@ export class StudentsService {
 </soapenv:Envelope>
     `;
   }
-  private removeCourseToStudentSoap(idStudent: string, idCourse: string) {
+  private removeCourseToStudentSoap(idStudent: number, idCourse: number) {
     return `
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:stud="http://www.example.com/student">
    <soapenv:Header/>
