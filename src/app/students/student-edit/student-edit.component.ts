@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 import { StudentsService } from '../students.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Country, Student } from '../../interface/student.interface';
 import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-student-edit',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule,RouterLink],
   templateUrl: './student-edit.component.html',
   styleUrl: './student-edit.component.css'
 })

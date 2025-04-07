@@ -1,18 +1,23 @@
 <div class="container">
-    <h1>Ver cursos</h1>
-  
-    <a href="#" routerLink="/course/index" class="btn btn-primary">Back</a>
-   
+    <a href="#" [routerLink]="['/course/index']" class="btn btn-primary">Volver</a>
+    <h1>Ver cursos</h1>   
     <div>
-        <strong>Id:</strong>
-        <p>{{ course?.id }}</p>
-    </div>
-    
-    <div>
-        <strong>Nombre:</strong>
-        <p>{{ course?.courseName }}</p>
-    </div>
-   
+        <table class="table table-striped">
+            <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                  </tr>
+            </thead>
+            <tbody>
+                  <tr>
+                    <td>{{ course?.id }}</td>
+                    <td>{{ course?.courseName }}</td>
+                  </tr>
+            </tbody>
+        </table>
+
+    </div>   
     <div>
         <strong>Estudiantes:</strong>
         <table class="table table-striped">
